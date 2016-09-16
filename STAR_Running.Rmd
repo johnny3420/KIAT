@@ -40,7 +40,16 @@ cd KIAR/New_Star/101bp.paired.star.dir
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
 ```
 
-###Running cufflinks on output
+###Troubleshooting poor GeneCounts file
+The 50bp run above produced a count file which had zero counts for any gene.
+Believe the created gtf file may be source of problem
+Rerunning with gff3 file and new sjdb and quantMode parameters
+Using screen -r 28681.pts-67.whitney
+```
+mkdir 50bp.paired.star.dir.2
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gff3 --sjdbGTFtagExonParentTranscript Parent --sjdbGTFfeatureExon CDS --sjdbOverhang 49 --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --runThreadN 6
+```
+###Planned running cufflinks on output
 ```
 cd 50bp.paired.star.dir/
 mkdir cufflink_output      
