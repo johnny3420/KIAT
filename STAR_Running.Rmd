@@ -28,6 +28,7 @@ cd ..
 ```
 
 ###Running Paired End STAR on 50bp and 101bp reads
+####Star Version 2.5 on Whitney, 
 ```
 cd New_Star/
 mkdir 50bp.paired.star.dir 101bp.paired.star.dir
@@ -35,3 +36,15 @@ cd 50bp.paired.star.dir/
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
 cd ../101bp.paired.star.dir
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
+cd ..
+```
+
+###Running cufflinks on output
+```
+cd 50bp.paired.star.dir/
+mkdir cufflink_output      
+cufflinks -u -p 16 -o cufflink_output --library-type fr-secondstrand -g ../../reference/Brassica_napus.annotation_v5.gtf -b ../../Brassica_napus_v4.1.chromosomes.fa Aligned.sortedByCoord.out.bam
+cd ../101bp.paired.star.dir/
+mkdir cufflink_output
+cufflinks -u -p 16 -o cufflink_output --library-type fr-secondstrand -g ../../reference/Brassica_napus.annotation_v5.gtf -b ../../Brassica_napus_v4.1.chromosomes.fa Aligned.sortedByCoord.out.bam
+```
