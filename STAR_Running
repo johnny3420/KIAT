@@ -1,0 +1,37 @@
+### Setup work space
+```
+mkdir KIAT
+cd KIAT/
+mkdir raw_data reference New_STAR
+```
+### Gathering files
+```
+cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/2016_summer/raw_data
+cp 50bp-05-11-Final-8ul_1.fq 50bp-05-11-Final-8ul_2.fq raw_data/
+cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/Reference/B.napus
+cp star_genome Brassica_napus_v4.1.chromosomes.fa Brassica_napus.annotation_v5.gff3 reference/
+```
+
+### Trimming fq files from 101bp to 50bp
+```
+cd raw_data
+fastx_trimmer -l 50 -i 05-11-Final-8ul_1.fq -o 50bp-05-11-Final-8ul_1.fq
+fastx_trimmer -l 50 -i 05-11-Final-8ul_2.fq -o 50bp-05-11-Final-8ul_2.fq
+cd ..
+```
+
+###Convert gff3 file to gtf to be used with STAR
+```
+cd reference/
+gffread Brassica_napus.annotation_v5.gff3 -T -o Brassica_napus.annotation_v5.gtf
+cd ..
+```
+
+###Running Paired End STAR on 50bp and 101bp reads
+```
+cd New_Star/
+mkdir 50bp.paired.star.dir 101bp.paired.star.dir
+cd 50bp.paired.star.dir/
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
+cd ../101bp.paired.star.dir
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
