@@ -2,7 +2,7 @@
 ```
 mkdir KIAT
 cd KIAT/
-mkdir raw_data reference New_STAR
+mkdir raw_data reference New_STAR Kallisto
 ```
 ### Gathering files
 ```
@@ -26,6 +26,13 @@ cd ..
 cd reference/
 gffread Brassica_napus.annotation_v5.gff3 -T -o Brassica_napus.annotation_v5.gtf
 cd ..
+```
+###Quick gene count with Kallisto
+```
+cd Kallisto
+mkdir 50bp 100bp
+kallisto quant --plaintext -i ../reference/Brassica_napus.annotation_v5.cds.19.kai -o 50bp/ ../raw_data/50bp-05-11-Final-8ul_1.fq ../raw_data/50bp-05-11-Final-8ul_2.fq
+kallisto quant --plaintext -i ../reference/Brassica_napus.annotation_v5.cds.19.kai -o 100bp/ ../raw_data/05-11-Final-8ul_1.fq ../raw_data/05-11-Final-8ul_2.fq
 ```
 
 ###Running Paired End STAR on 50bp and 101bp reads
