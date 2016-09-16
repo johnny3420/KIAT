@@ -7,6 +7,7 @@ mkdir raw_data reference New_STAR
 ### Gathering files
 ```
 cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/2016_summer/raw_data
+### Using fastq files suggested by Ruijuan
 cp 50bp-05-11-Final-8ul_1.fq 50bp-05-11-Final-8ul_2.fq raw_data/
 cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/Reference/B.napus
 cp star_genome Brassica_napus_v4.1.chromosomes.fa Brassica_napus.annotation_v5.gff3 reference/
@@ -28,15 +29,15 @@ cd ..
 ```
 
 ###Running Paired End STAR on 50bp and 101bp reads
-####Star Version 2.5 on Whitney, 
+####Star Version 2.5.2b on Whitney, not using Coloma since it's on version 2.4.1d
 ```
 cd New_Star/
 mkdir 50bp.paired.star.dir 101bp.paired.star.dir
 cd 50bp.paired.star.dir/
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
-cd ../101bp.paired.star.dir
+### Running next alignment on screen -r 16240.pts-40.whitney
+cd KIAR/New_Star/101bp.paired.star.dir
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
-cd ..
 ```
 
 ###Running cufflinks on output
