@@ -56,6 +56,25 @@ Using screen -r 28681.pts-67.whitney
 mkdir 50bp.paired.star.dir.2
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gff3 --sjdbGTFtagExonParentTranscript Parent --sjdbGTFfeatureExon CDS --sjdbOverhang 49 --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --runThreadN 6
 ```
+
+Still did not work. Using R to create gtf file now
+```
+library(rtracklayer)
+gff <- import.gff("Brassica_napus.annotation_v5.gff3")
+gff
+gff$gene_id <- ifelse(is.na(gff$ID),gff$Parent,gff$ID)
+export(gff,"Brassica_napus.annotation_v5.gtf",format="gtf")
+```
+
+Rerunning 
+```
+cd 50bp.paired.star.dir/
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
+### Running next alignment on screen -r 16240.pts-40.whitney
+cd KIAR/New_Star/101bp.paired.star.dir
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
+```
+
 ###Planned running cufflinks on output
 ```
 cd 50bp.paired.star.dir/
