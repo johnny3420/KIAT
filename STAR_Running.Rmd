@@ -13,7 +13,7 @@ cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/Re
 cp star_genome Brassica_napus_v4.1.chromosomes.fa Brassica_napus.annotation_v5.gff3 reference/
 ```
 
-### Trimming fq files from 101bp to 50bp
+### Trimming fq files from 100bp to 50bp
 ```
 cd raw_data
 fastx_trimmer -l 50 -i 05-11-Final-8ul_1.fq -o 50bp-05-11-Final-8ul_1.fq
@@ -39,17 +39,18 @@ kallisto quant --plaintext -i ../reference/Brassica_napus.annotation_v5.cds.19.k
 ####Star Version 2.5.2b on Whitney, not using Coloma since it's on version 2.4.1d
 ```
 cd New_Star/
-mkdir 50bp.paired.star.dir 101bp.paired.star.dir
+mkdir 50bp.paired.star.dir 100bp.paired.star.dir
 cd 50bp.paired.star.dir/
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
 ### Running next alignment on screen -r 16240.pts-40.whitney
-cd KIAR/New_Star/101bp.paired.star.dir
+cd KIAR/New_Star/100bp.paired.star.dir
 STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
 ```
 
 ###Troubleshooting poor GeneCounts file
 The 50bp run above produced a count file which had zero counts for any gene.
 Believe the created gtf file may be source of problem
+Log.out file says gene_id parameter was not found for every annotation
 Rerunning with gff3 file and new sjdb and quantMode parameters
 Using screen -r 28681.pts-67.whitney
 ```
@@ -69,14 +70,24 @@ export(gff,"Brassica_napus.annotation_v5.gff3",format="gff3")
 gffread Brassica_napus.annotation_v5.gff3 -T -o Brassica_napus.annotation_v5.gtf
 ```
 
-Rerunning 
+Rerunning on Coloma because Whitney is down
 ```
 cd 50bp.paired.star.dir/
-STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
-### Running next alignment on screen -r 16240.pts-40.whitney
-cd KIAR/New_Star/101bp.paired.star.dir
-STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../reference/Brassica_napus.annotation_v5.gtf --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 6
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../Tests/test.Brassica_napus.annotation_v5.gtf --sjdbOverhang 49 --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 9
+cd KIAR/New_Star/100bp.paired.star.dir
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../Tests/test.Brassica_napus.annotation_v5.gtf --sjdbOverhang 99 --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode GeneCounts --twopassMode Basic --runThreadN 9
 ```
+GeneCount file was not produced in this process for some reason
+Trying a new test with new gff3 file instead of gtf file
+
+###Method that worked on Whitney but not Coloma
+```
+cd 100bp.paired.star.dir/
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../Tests/test.Brassica_napus.annotation_v5.gff3 --sjdbGTFtagExonParentTranscript Parent --sjdbGTFfeatureExon CDS --sjdbOverhang 99 --readFilesIn ../../raw_data/05-11-Final-8ul_1.fq ../../raw_data/05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --runThreadN 9
+cd ../50bp.paired.star.dir/
+STAR --genomeDir ../../reference/star_genome --sjdbGTFfile ../../Tests/test.Brassica_napus.annotation_v5.gff3 --sjdbGTFtagExonParentTranscript Parent --sjdbGTFfeatureExon CDS --sjdbOverhang 49 --readFilesIn ../../raw_data/50bp-05-11-Final-8ul_1.fq ../../raw_data/50bp-05-11-Final-8ul_2.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --runThreadN 9
+```
+On Coloma get segmentation fault 11. After reading up on fault, may have been caused due to running out of memory on Coloma. Worked on Whitney. 
 
 ###Planned running cufflinks on output
 ```
