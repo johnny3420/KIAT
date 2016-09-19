@@ -30,9 +30,14 @@ cd ..
 ###Quick gene count with Kallisto
 ```
 cd Kallisto
-mkdir 50bp 100bp
+mkdir 50bp 100bp combined
 kallisto quant --plaintext -i ../reference/Brassica_napus.annotation_v5.cds.19.kai -o 50bp/ ../raw_data/50bp-05-11-Final-8ul_1.fq ../raw_data/50bp-05-11-Final-8ul_2.fq
 kallisto quant --plaintext -i ../reference/Brassica_napus.annotation_v5.cds.19.kai -o 100bp/ ../raw_data/05-11-Final-8ul_1.fq ../raw_data/05-11-Final-8ul_2.fq
+cd combined
+awk '{print $1 "\t" $4}' ../50bp/abundance.tsv | sed 1d | sed '1 i\ID '50bp'' > 50bp.abundance.tsv
+awk '{print $1 "\t" $5}' ../50bp/abundance.tsv | sed 1d | sed '1 i\ID '50bp'' > 50bp.abundance.normalized.tsv
+awk '{print $1 "\t" $4}' ../100bp/abundance.tsv | sed 1d | sed '1 i\ID '100bp'' > 100bp.abundance.tsv
+awk '{print $1 "\t" $5}' ../100bp/abundance.tsv | sed 1d | sed '1 i\ID '100bp'' > 100bp.abundance.normalized.tsv
 ```
 
 ###Running Paired End STAR on 50bp and 101bp reads
