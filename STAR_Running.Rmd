@@ -98,7 +98,7 @@ On Coloma get segmentation fault 11. After reading up on fault, may have been ca
 ```
 cd 50bp.paired.star.dir/
 mkdir cufflink_output      
-cufflinks -u -p 16 -o cufflink_output --library-type fr-secondstrand -g ../../reference/Brassica_napus.annotation_v5.gtf -b ../../Brassica_napus_v4.1.chromosomes.fa Aligned.sortedByCoord.out.bam
+cufflinks -u -p 9 -o cufflink_output --library-type fr-secondstrand -g ../../Tests/test.Brassica_napus.annotation_v5.gff3 -b ../../reference/Brassica_napus_v4.1.chromosomes.fa Aligned.sortedByCoord.out.bam
 cd ../101bp.paired.star.dir/
 mkdir cufflink_output
 cufflinks -u -p 16 -o cufflink_output --library-type fr-secondstrand -g ../../reference/Brassica_napus.annotation_v5.gtf -b ../../Brassica_napus_v4.1.chromosomes.fa Aligned.sortedByCoord.out.bam
