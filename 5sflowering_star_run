@@ -1,0 +1,24 @@
+#!/bin/bash
+reads=/Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/raw_data/Flowering
+home=/Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/Flowering_Star/50bp
+files="50bp_Ae_Gae_2 50bp_Ae_Gae_3 50bp_All1_Gae_2 50bp_All1_Gae_3 50bp_2 50bp_6"
+
+echo $reads
+echo $home
+echo $files
+cd $home
+for i in $files
+	do
+	if [[ -d $i.50bp.single.star.dir ]]
+          then
+             echo OK
+   	 else 
+             mkdir $i.50bp.single.star.dir
+     	 fi
+
+     	 cd $i.50bp.single.star.dir/
+
+	STAR --genomeDir ../../../reference/star_genome --sjdbGTFfile ../../../Tests/test.Brassica_napus.annotation_v5.gff3 --sjdbGTFtagExonParentTranscript Parent --sjdbGTFfeatureExon CDS --sjdbOverhang 49 --readFilesIn ${reads}/${i}_1.fq --outSAMtype BAM Unsorted SortedByCoordinate --outSAMunmapped Within --quantMode TranscriptomeSAM GeneCounts --twopassMode Basic --runThreadN 9
+	cd ..
+
+done
