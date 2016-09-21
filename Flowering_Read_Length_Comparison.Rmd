@@ -1,1 +1,7 @@
-###Using 2 gt, 6 replicates, 1 tissue type (Flowering)
+##Using 2 gt, 6 replicates, 1 tissue type (Flowering)
+
+###Setting up workspace
+```
+mkdir KIAT/raw_data/Flowering
+mkdir KIAT/Flowering_STAR
+```
