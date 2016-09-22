@@ -21,6 +21,6 @@ paste 50bp* | awk '{print $1}' > 50bp.ID
 paste 50bp.ID 50bp.reads > flowering.star.50bp.read.count.tsv
 paste 100bp* | awk '{ for (i=1;i<=NF;i+=2) {$i=""} print $0}' | sed 's/ /\t/g' > 100bp.reads
 paste 100bp* | awk '{print $1}' > 100bp.ID
-paste 100bp.ID 100bp.reads > flowering.star.100bp.read.count.tsv
+paste 100bp.reads > flowering.star.100bp.read.count.tsv
 paste flowering* > flowering.star.read.count.tsv
 
