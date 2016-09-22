@@ -1,3 +1,9 @@
+# load necessary libs & functions 
+library(edgeR)
+library(ggplot2)
+library(DESeq2)
+library(ggdendro)
+library(reshape2)
 ### Formatting Data
 flowering.read.count <- read.table("Counts/flowering.star.read.count.tsv", header = T, check.names = F)
 rownames(flowering.read.count) <- flowering.read.count[,1]
@@ -24,9 +30,7 @@ head(flowering.read.count)
 save(flowering.read.count, file = "flowering.read.count.Rdata")
 
 ### Set up sample description
-# load necessary libs & functions 
-library(edgeR)
-library(ggplot2)
+
 
 # filter based on read count, assign group, normalize, design matrix, calculate dispersion   
 # set up group 
@@ -55,7 +59,6 @@ save(flowering.read.count.small, file = "flowering.read.count.small.Rdata")
 ###voom transformation
 
 load("flowering.read.count.small.Rdata")
-library("DESeq2")
 
 dds.flowering <- DESeqDataSetFromMatrix(countData = round(flowering.read.count.small), colData = flowering.read.count.sample, design = ~ batch + genotype)
 
@@ -101,7 +104,7 @@ p.mds
 ggsave("MDS.png", width = 11, height = 8)
 
 # clustering to check sample seperation 
-library(ggdendro)
+
 
 hc.flowering <- hclust(dist(t(vstMat.flowering)))
 
@@ -124,22 +127,64 @@ ggsave("clustering_new.png", width = 15, height = 8)
 # pairwise comparison using GLM model 
 # design matrix
 design.flowering <- model.matrix(~0+group, data = flowering.read.count.sample)
-dge.data.flowering <- estimateGLMCommonDisp(dge.data.flowering, design.flowering,verbose = TRUE) # Disp = 0.25572 , BCV = 0.5057
+dge.data.flowering <- estimateGLMCommonDisp(dge.data.flowering, design.flowering,verbose = TRUE)
 dge.data.flowering <- estimateGLMTrendedDisp(dge.data.flowering,design.flowering)
 dge.data.flowering <- estimateGLMTagwiseDisp(dge.data.flowering,design.flowering)
 plotBCV(dge.data.flowering)
 
-### Find differentially expressed genes based on read length
 
-design.flowering <- model.matrix(~genotype+length+pairing, data = flowering.read.count.sample)
-rownames(design.flowering) <- flowering.read.count.sample$file
-dge.data.flowering <- estimateGLMCommonDisp(dge.data.flowering, design.flowering,verbose = TRUE) # Disp = 0.13449 , BCV = 0.3667
+### Comparing different conditions
+#Load files
+load("flowering.read.count.small.Rdata")
+load("flowering.read.count.sample.Rdata")
+
+# Create DGElist and Normalize
+dge.data.flowering <- DGEList(counts=flowering.read.count.small, group=flowering.read.count.sample$group)
+dge.data.flowering <- calcNormFactors(dge.data.flowering, method = "TMM") 
+
+# Setting up design
+design.flowering <- model.matrix(~0+group, data=dge.data.flowering$samples)
+colnames(design.flowering) <- levels(dge.data.flowering$samples$group)
+design.flowering
+
+# estimating dispersions and create fit
+dge.data.flowering <- estimateGLMCommonDisp(dge.data.flowering, design.flowering,verbose = TRUE) # Disp = 0.1588 , BCV = 0.3985
 dge.data.flowering <- estimateGLMTrendedDisp(dge.data.flowering,design.flowering)
 dge.data.flowering <- estimateGLMTagwiseDisp(dge.data.flowering,design.flowering)
 fit <- glmFit(dge.data.flowering, design.flowering)
-length.lrt <- glmLRT(fit,coef = "length50bp")
-topTags(length.lrt)
-summary(decideTestsDGE(length.lrt,p.value=0.01)) #This uses the FDR.  0.05 would be OK also.
 
-# Extract genes with a FDR < 0.01 (could also use 0.05)
-DEgene.gt <- topTags(gt.lrt,n = Inf)$table[topTags(gt.lrt,n = Inf)$table$FDR<0.01,]
+## Finding differentially expressed genes with genotype and constant pairing, based on read length
+# Da-Ae paired
+DA.P.length.lrt <-glmLRT(fit, contrast = c(-1,0,0,0,1,0,0,0))
+DA.P.length <- summary(decideTestsDGE(DA.P.length.lrt,p.value=0.01))
+# Da-Ol-1 paired
+DO.P.length.lrt <-glmLRT(fit, contrast = c(0,-1,0,0,0,1,0,0))
+DO.P.length <- summary(decideTestsDGE(DO.P.length.lrt,p.value=0.01))
+# Da-Ae single
+DA.S.length.lrt <-glmLRT(fit, contrast = c(0,0,-1,0,0,0,1,0))
+DA.S.length <- summary(decideTestsDGE(DA.S.length.lrt,p.value=0.01))
+# Da-Ol-1 single
+DO.S.length.lrt <-glmLRT(fit, contrast = c(0,0,0,-1,0,0,0,1))
+DO.S.length <- summary(decideTestsDGE(DO.S.length.lrt,p.value=0.01))
+
+length <- cbind(DA.P.length,DO.P.length,DA.S.length,DO.S.length)
+colnames(length) <- c("DA.P.length","DO.P.length","DA.S.length","DO.S.length")
+
+## Finding differentially expressed genes with genotype and constant length, based on pairing
+
+# Da-Ae 100bp
+DA.100bp.pairing.lrt <-glmLRT(fit, contrast = c(-1,0,1,0,0,0,0,0))
+DA.100bp.pairing <- summary(decideTestsDGE(DA.P.length.lrt,p.value=0.01))
+# Da-Ol-1 100bp
+DO.100bp.pairing.lrt <-glmLRT(fit, contrast = c(0,-1,0,1,0,0,0,0))
+DO.100bp.pairing <- summary(decideTestsDGE(DO.P.length.lrt,p.value=0.01))
+# Da-Ae 50bp
+DA.50bp.pairing.lrt <-glmLRT(fit, contrast = c(0,0,0,0,-1,0,1,0))
+DA.50bp.pairing <- summary(decideTestsDGE(DA.S.length.lrt,p.value=0.01))
+# Da-Ol-1 50bp
+DO.50bp.pairing.lrt <-glmLRT(fit, contrast = c(0,0,0,0,0,-1,0,1))
+DO.50bp.pairing <- summary(decideTestsDGE(DO.S.length.lrt,p.value=0.01))
+
+pairing <- cbind(DA.100bp.pairing,DO.100bp.pairing,DA.50bp.pairing,DO.50bp.pairing)
+colnames(pairing) <- c("DA.100bp.pairing","DO.100bp.pairing","DA.50bp.pairing","DO.50bp.pairing")
+
