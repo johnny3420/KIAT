@@ -57,4 +57,4 @@ p.dendro <- p.dendro + geom_text(data = label(ggdata.flowering), aes(x = x, y = 
 p.dendro
 
 # Save Plot
-ggsave("clustering_new.png", width = 15, height = 8)
+ggsave("clustering_new.png", width = 20, height = 8)
