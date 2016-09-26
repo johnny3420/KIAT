@@ -21,6 +21,7 @@ design.flowering
 dge.data.flowering <- estimateGLMCommonDisp(dge.data.flowering, design.flowering,verbose = TRUE) # Disp = 0.1588 , BCV = 0.3985
 dge.data.flowering <- estimateGLMTrendedDisp(dge.data.flowering,design.flowering)
 dge.data.flowering <- estimateGLMTagwiseDisp(dge.data.flowering,design.flowering)
+plotBCV(dge.data.flowering)
 design.flowering
 fit <- glmFit(dge.data.flowering, design.flowering)
 
@@ -86,17 +87,18 @@ for (i in 1:ncol(Flowering.DE)){
 row.names(Flowering.DE) <- c("# down regulated genes","# unaffected genes","# up regulated genes","Total expressed genes", "Total differentially expressed genes", "% differentially expressed")
 
 Flowering.DE
-### Extracting names of differentially expressed genes between genotypes
+#write.csv(Flowering.DE, "Flowering.DE.csv")
+### Extracting differentially expressed genes between genotypes
 
 DEgene.gt.100bp.paired <- topTags(DAvsDO.100bp.paired.lrt,n = Inf)$table[topTags(DAvsDO.100bp.paired.lrt,n = Inf)$table$FDR<0.01,]
 DEgene.gt.50bp.paired <- topTags(DAvsDO.50bp.paired.lrt,n = Inf)$table[topTags(DAvsDO.50bp.paired.lrt,n = Inf)$table$FDR<0.01,]
 DEgene.gt.100bp.single <- topTags(DAvsDO.100bp.single.lrt,n = Inf)$table[topTags(DAvsDO.100bp.single.lrt,n = Inf)$table$FDR<0.01,]
 DEgene.gt.50bp.single <- topTags(DAvsDO.50bp.single.lrt,n = Inf)$table[topTags(DAvsDO.50bp.single.lrt,n = Inf)$table$FDR<0.01,]
 
-write.csv(DEgene.gt.50bp.paired, "DEgene.gt.50bp.paired.csv")
-write.csv(DEgene.gt.100bp.paired, "DEgene.gt.100bp.paired.csv")
-write.csv(DEgene.gt.50bp.single, "DEgene.gt.50bp.single.csv")
-write.csv(DEgene.gt.100bp.single, "DEgene.gt.100bp.single.csv")
+#write.csv(DEgene.gt.50bp.paired, "DEgene.gt.50bp.paired.csv")
+#write.csv(DEgene.gt.100bp.paired, "DEgene.gt.100bp.paired.csv")
+#write.csv(DEgene.gt.50bp.single, "DEgene.gt.50bp.single.csv")
+#write.csv(DEgene.gt.100bp.single, "DEgene.gt.100bp.single.csv")
 
 ###Combining into 1 tab delim file of only gene names
 p100 <- as.data.frame(row.names(DEgene.gt.100bp.paired))
@@ -112,7 +114,7 @@ cbind.fill <- function(...){
 }
 combined <- data.frame(cbind.fill(p100,p50,s100,s50))
 colnames(combined) <- c("100bp_paired","50bp_paired","100bp_single","50bp_single")
-write.table(combined, "Combined_DE_gene_names.tab")
+#write.table(combined, "Combined_DE_gene_names.tab")
 
 ### Breaking DEGs from above based on up and down regulation
 
@@ -146,12 +148,16 @@ length(setdiff(up.DEgene.gt.100bp.single,up.DEgene.gt.100bp.paired)) #620 genes 
 length(intersect(up.DEgene.gt.100bp.single,up.DEgene.gt.50bp.paired)) #2907 Shared up regulated genes
 length(setdiff(up.DEgene.gt.100bp.single,up.DEgene.gt.50bp.paired)) #434 genes unique to 100bp single
 length(setdiff(up.DEgene.gt.50bp.paired,up.DEgene.gt.100bp.single)) #439 genes unique to 50bp paired
+#100bp paired vs 50bp single
+length(intersect(up.DEgene.gt.100bp.paired,up.DEgene.gt.50bp.single)) #2451 Shared up regulated genes
+length(setdiff(up.DEgene.gt.100bp.paired,up.DEgene.gt.50bp.single)) #479 genes unique to 100bp paired
+length(setdiff(up.DEgene.gt.50bp.single,up.DEgene.gt.100bp.paired)) #717 genes unique to 50bp single
 #Put into a table
-Only_1st <- c(281,209,434)
-Only_2nd <- c(697,620,439)
-Shared <- c(2649,2721,2907)
+Only_1st <- c(281,209,434,479)
+Only_2nd <- c(697,620,439,717)
+Shared <- c(2649,2721,2907,2451)
 up.reg <- t(data.frame(Only_1st,Only_2nd,Shared))
-colnames(up.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p")
+colnames(up.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p","100p_vs_50s")
 
 ### Comparing names of down regulated genes
 #100bp paired vs 50bp paired
@@ -166,16 +172,24 @@ length(setdiff(down.DEgene.gt.100bp.single,down.DEgene.gt.100bp.paired)) #545 ge
 length(intersect(down.DEgene.gt.100bp.single,down.DEgene.gt.50bp.paired)) #2649 Shared down regulated genes
 length(setdiff(down.DEgene.gt.100bp.single,down.DEgene.gt.50bp.paired)) #427 genes unique to 100bp single
 length(setdiff(down.DEgene.gt.50bp.paired,down.DEgene.gt.100bp.single)) #450 genes unique to 50bp paired
+#100bp paired vs 50bp single
+length(intersect(down.DEgene.gt.100bp.paired,down.DEgene.gt.50bp.single)) #2343 Shared down regulated genes
+length(setdiff(down.DEgene.gt.100bp.paired,down.DEgene.gt.50bp.single)) #433 genes unique to 100bp paired
+length(setdiff(down.DEgene.gt.50bp.single,down.DEgene.gt.100bp.paired)) #731 genes unique to 50bp single
 # Put into table
-Only_1st <- c(326,245,427)
-Only_2nd <- c(649,545,450)
-Shared <- c(2450,2531,2649)
+Only_1st <- c(326,245,427,433)
+Only_2nd <- c(649,545,450,731)
+Shared <- c(2450,2531,2649,2343)
 down.reg <- t(data.frame(Only_1st,Only_2nd,Shared))
-colnames(down.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p")
+colnames(down.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p","100p_vs_50s")
 
 ## Combining all DE genes
 de.reg <- up.reg + down.reg
 
+## Plotting of DE genes between different comparisons
+melt.de.reg <- melt(de.reg, varnames = c("Ownership","Comparison"))
+ggplot(data=melt.de.reg, aes(Ownership,value, fill=Ownership)) + facet_wrap(~ Comparison, scales = "free_y") + geom_bar(stat = "identity")
+ggsave("combined.DE.barplot.png", width = 20, height = 8)
 ### Compairing names of similarilly expressed genes
 #100bp paired vs 50bp paired
 length(intersect(SEgene.gt.100bp.paired,SEgene.gt.50bp.paired)) #49446 Shared similarially regulated genes
@@ -189,12 +203,16 @@ length(setdiff(SEgene.gt.100bp.single,SEgene.gt.100bp.paired)) #454 genes unique
 length(intersect(SEgene.gt.100bp.single,SEgene.gt.50bp.paired)) #49192 Shared similarially regulated genes
 length(setdiff(SEgene.gt.100bp.single,SEgene.gt.50bp.paired)) #889 genes unique to 100bp single
 length(setdiff(SEgene.gt.50bp.paired,SEgene.gt.100bp.single)) #861 genes unique to 50bp paired
+#100bp paired vs 50bp single
+length(intersect(SEgene.gt.100bp.paired,SEgene.gt.50bp.single)) #49344 Shared similarially regulated genes
+length(setdiff(SEgene.gt.100bp.paired,SEgene.gt.50bp.single)) #1448 genes unique to 100bp paired
+length(setdiff(SEgene.gt.50bp.single,SEgene.gt.100bp.paired)) #912 genes unique to 50bp single
 # Put into table
-Only_1st <- c(1346,1165,889)
-Only_2nd <- c(607,454,861)
-Shared <- c(49446,49627,49192)
+Only_1st <- c(1346,1165,889,1448)
+Only_2nd <- c(607,454,861,912)
+Shared <- c(49446,49627,49192,49344)
 sim.reg <- t(data.frame(Only_1st,Only_2nd,Shared))
-colnames(sim.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p")
+colnames(sim.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p","100p_vs50s")
 
 ### Barplots
 # bring your data to long format as needed by ggplot
@@ -204,8 +222,9 @@ melt.Flowering.DE$value <- as.numeric(as.character(melt.Flowering.DE$value))
 colnames(melt.Flowering.DE) <- c("Condition","Group","Count")
 # plot and facet by Condition
 ggplot(data=melt.Flowering.DE, aes(Condition,Count, fill=Condition)) + facet_wrap(~ Group, scales = "free_y") + geom_bar(stat = "identity")
-ggsave("DE.barplot.png", width = 20, height = 8)
+#ggsave("DE.barplot.png", width = 20, height = 8)
 # log transform and replot
 log2.melt.Flowering.DE <- melt.Flowering.DE
 log2.melt.Flowering.DE[,3] <- log(log2.melt.Flowering.DE[3], 2)
 ggplot(data=log2.melt.Flowering.DE, aes(Condition,Count, fill=Condition)) + facet_wrap(~ Group, scales = "free_y") + geom_bar(stat = "identity")
+
