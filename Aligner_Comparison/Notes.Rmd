@@ -1,0 +1,62 @@
+#Comparing BWA and Tophat with Star
+
+## Creating Alignment files
+
+### Gathering and renaming read files
+
+```
+cp /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/ruijuanli/2016_summer/raw_data/2_*.fq /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/raw_data/Flowering
+cd /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/raw_data/Flowering
+### Renaming for distinguishing from already present 50bp_2_1.fq and 50bp_2_2.fq
+mv 2_1.fq 100bp_2_1.fq
+mv 2_2.fq 100bp_2_2.fq
+```
+
+### Setting up workspace
+
+```
+cd ~/KIAT
+mkdir BWA Tophat
+cd BWA
+mkdir 2_100bp.paired 2_100bp.single 2_50bp.paired 2_50bp.single
+cd ../Tophat
+mkdir 2_100bp.paired 2_100bp.single 2_50bp.paired 2_50bp.single
+```
+
+### Indexing reference for Tophat and BWA
+
+```
+### Tophat index creation
+cd ~/KIAT/Tophat
+cp /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/reference/Brassica_napus_v4.1.chromosomes.fa .
+bowtie2-build Brassica_napus_v4.1.chromosomes.fa Brassica_napus_v4.1.chromosomes
+
+### BWA index creation
+cd ~/KIAT/BWA
+cp /Network/Servers/avalanche.plb.ucdavis.edu/Volumes/Mammoth/Users/johndavis/KIAT/reference/Brassica_napus_v4.1.chromosomes.fa .
+bwa index Brassica_napus_v4.1.chromosomes.fa
+```
+
+### Running alignments
+
+```
+### Tophat
+cd ~/KIAT/Tophat
+./tophat_run.sh
+
+### BWA
+cd ~/KIAT/BWA
+./bwa_run.sh
+```
+
+## Looking at mapping results
+
+```
+## BWA
+## All previously made directories now have a aln.sam file in them
+
+## Number of reads mapped
+awk '$3 !="\*"' aln.sam > test
+
+## Number of reads unmapped
+awk '$3 =="\*"' aln.sam > test2
