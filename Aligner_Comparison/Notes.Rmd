@@ -60,3 +60,4 @@ awk '$3 !="\*"' aln.sam > test
 
 ## Number of reads unmapped
 awk '$3 =="\*"' aln.sam > test2
+```
