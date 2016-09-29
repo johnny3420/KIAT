@@ -51,13 +51,33 @@ cd ~/KIAT/BWA
 
 ## Looking at mapping results
 
+### Separating mapped from unmapped
+
 ```
 ## BWA
 ## All previously made directories now have a aln.sam file in them
+## Repeat in each directory
 
-## Number of reads mapped
-awk '$3 !="\*"' aln.sam > test
+## SAM of mapped read alignments
+awk '$3 !="\*"' aln.sam > mapped
 
-## Number of reads unmapped
-awk '$3 =="\*"' aln.sam > test2
+## SAM of unmapped reads
+awk '$3 =="\*"' aln.sam > unmapped
+```
+
+### Collecting counts for each sequencing run
+
+```
+## BWA single end reads
+## number of individual reads mapped
+grep "^SN840" mapped | awk '{print $1}' | sort | uniq | wc -l
+
+## number of unmapped reads
+wc -l unmapped
+
+## number of uniquely mapped reads
+grep "^SN840" mapped | awk '{print $1}' | sort | uniq -c | grep '^ *1 ' | wc -l
+
+## number of reads multimapped
+grep "^SN840" mapped | awk '{print $1}' | sort | uniq -cd | wc -l
 ```
