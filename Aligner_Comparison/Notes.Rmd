@@ -59,25 +59,31 @@ cd ~/KIAT/BWA
 ## Repeat in each directory
 
 ## SAM of mapped read alignments
-awk '$3 !="\*"' aln.sam > mapped
+awk '$3 !="\*"' aln.sam | grep "^SN840" > mapped
 
 ## SAM of unmapped reads
-awk '$3 =="\*"' aln.sam > unmapped
+awk '$3 =="\*"' aln.sam | grep "^SN840"> unmapped
 ```
 
 ### Collecting counts for each sequencing run
 
 ```
 ## BWA single end reads
-## number of individual reads mapped
-grep "^SN840" mapped | awk '{print $1}' | sort | uniq | wc -l
+## number of mapped alignments made
+wc -l mapped
 
-## number of unmapped reads
+## number of individual reads mapped
+awk '{print $1}' mapped | sort | uniq | wc -l
+
+## number of created supplementary reads
+## Subtract (awk '{print $1}' mapped | sort | uniq | wc -l) from (wc -l mapped)
+
+## number of unmapped reads / unmapped alignments
 wc -l unmapped
 
 ## number of uniquely mapped reads
-grep "^SN840" mapped | awk '{print $1}' | sort | uniq -c | grep '^ *1 ' | wc -l
+grep -v "XA:Z" mapped | grep -v "SA:Z" | wc -l
 
 ## number of reads multimapped
-grep "^SN840" mapped | awk '{print $1}' | sort | uniq -cd | wc -l
+grep -e "XA:Z" -e "SA:Z" mapped | wc -l
 ```
