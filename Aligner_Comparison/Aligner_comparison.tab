@@ -1,4 +1,3 @@
-#Comparison of mapping rate percentages for each aligner
 Sample	STAR	Tophat	BWA
 100bp_PE	55.65	37.2	98.34
 100bp_SE	63.66	41.9	95.78
