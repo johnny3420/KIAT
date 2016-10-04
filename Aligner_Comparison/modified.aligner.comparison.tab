@@ -1,0 +1,14 @@
+Sample	Aligner	Unique	Multi Unmapped
+100bp_pe	STAR	35.70	19.96	44.34
+100bp_se	STAR	38.24	25.42	36.34
+50bp_pe	STAR	43.99	26.17	29.84
+50bp_se	STAR	37.80	34.84	27.36
+100bp_pe	Tophat	24.89	12.31	62.8
+100bp_se	Tophat	26.98	14.91	58.11
+50bp_pe	Tophat	40.98	25.12	33.9
+50bp_se	Tophat	40.66	31.94	27.4
+100bp_pe 	BWA	34.78	63.56	1.66
+100bp_se	BWA	40.45	55.33	4.22
+50bp_pe	BWA	54.46	36.14	9.40
+50bp_se	BWA	43.56	37.13	19.31
+
