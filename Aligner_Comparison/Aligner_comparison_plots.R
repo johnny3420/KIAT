@@ -17,4 +17,4 @@ ggplot(data=melt.m.stats, aes(Mapping,Percentage, fill=Mapping)) +
   facet_grid(Sample ~ Aligner) + 
   geom_bar(stat = "identity")
 
-ggsave("modified.aligner_comparison_barplot.png")
+#ggsave("Aligner_Comparison/modified.aligner_comparison_barplot.png")
