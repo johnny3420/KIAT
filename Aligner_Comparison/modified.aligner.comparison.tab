@@ -7,7 +7,7 @@ Sample	Aligner	Unique	Multi	Unmapped
 100bp_se	Tophat	26.98	14.91	58.11
 50bp_pe	Tophat	40.98	25.12	33.9
 50bp_se	Tophat	40.66	31.94	27.4
-100bp_pe 	BWA	34.78	63.56	1.66
+100bp_pe	BWA	34.78	63.56	1.66
 100bp_se	BWA	40.45	55.33	4.22
 50bp_pe	BWA	54.46	36.14	9.40
 50bp_se	BWA	43.56	37.13	19.31
