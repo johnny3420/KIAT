@@ -75,6 +75,9 @@ wc -l mapped
 ## number of individual reads mapped
 awk '{print $1}' mapped | sort | uniq | wc -l
 
+## number of created supplementary reads
+awk '{print $1}' mapped | sort | uniq -cd | wc -l
+
 ## number of unmapped reads / unmapped alignments
 wc -l unmapped
 
