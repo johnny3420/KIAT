@@ -1,0 +1,22 @@
+###Extracting mapping stats from BWA sam files for use in R
+
+## Collecting mapped reads and spliting
+
+```
+### Working in the 4 folders with aln.sam files created in Aligner_Comparision section
+cd KIAT/BWA/2_*
+awk '$3 !="\*"' aln.sam | grep "^SN840" > mapped
+mkdir Unique_vs_Multi
+grep -v "XA:Z" mapped | grep -v "SA:Z" > Unique_vs_Multi/Unique
+grep -e "XA:Z" -e "SA:Z" mapped > Unique_vs_Multi/Multi
+```
+
+## Extracting ID, mapQ, and CIGAR from each read
+
+```
+## Repeat for each folder but change name of output file ie 100bp_p_Unique, 100bp_s_Unique, 50bp_p_Unique
+awk '{print $1, $5, $6}' Unique > 100bp_p_Unique
+awk '{print $1, $5, $6}' Multi > 100bp_p_Multi
+```
+
+## Working in R now
