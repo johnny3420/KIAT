@@ -27,7 +27,7 @@ awk '{print $1, $5, $6}' Multi > 100bp_p_Multi
 ./mapQ_extraction
 cd mapQ
 ## Combining all mapQ values into 1 file
-paste 100bp_p_Unique_mapQ 100bp_s_Unique_mapQ 50bp_p_Unique_mapQ 50bp_s_Unique_mapQ 100bp_p_Multi_mapQ 100bp_s_Multi_mapQ 50bp_p_Multi_mapQ 50bp_s_Multi_mapQ | expand -t 2 > combined_mapQ
+paste 100bp_p_Multi_mapQ 50bp_p_Unique_mapQ 50bp_p_Multi_mapQ 100bp_p_Unique_mapQ 100bp_s_Multi_mapQ 50bp_s_Unique_mapQ 100bp_s_Unique_mapQ 50bp_s_Multi_mapQ | tr -s [:blank:] | tr '\t' ',' > combined_mapQ
 
 ```
 
