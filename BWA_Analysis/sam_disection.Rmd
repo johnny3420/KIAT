@@ -31,4 +31,6 @@ paste 100bp_p_Multi_mapQ 50bp_p_Unique_mapQ 50bp_p_Multi_mapQ 100bp_p_Unique_map
 
 ```
 
+#FILE IS WAY TOO BIG FOR R
+
 ## Working in R now
