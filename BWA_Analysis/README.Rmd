@@ -1,5 +1,0 @@
-All the mapped reads were extracted from the BWA sam files.
-From there the reads were split between unique and multimapped reads
-Once split, those files were condensed down to only ID, mapQ, and CIGAR string.
-Due to large file sizes, after looking at overall mapQ, smaller sample sizes were used.
-When looking at CIGAR scores of 0 mapQ reads, only 5000000 random reads from each condition were used.

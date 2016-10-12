@@ -1,8 +1,0 @@
-File=`ls | sed 's/mapQ.*//'`
-echo $File
-mkdir mapQ
-for i in $File
-	do
-	awk '{print $2}' ${i} > mapQ/${i}_mapQ
-	done
-echo done
