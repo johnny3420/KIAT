@@ -15,8 +15,20 @@ mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/Tri
 cd KIAT/Flowering_STAR/Trimmed_Reads
 ./../flowering_trim.sh
 ```
-### Running STAR on trimmed reads
+### Running STAR on 50bp trimmed reads
 
 ```
 ./short_star_run.sh
+```
+
+### Running STAR on 100bp single end trimmed reads
+
+```
+./long_star_run.sh
+```
+
+### Collecting Gene Counts
+
+```
+./gene_counts.sh
 ```
