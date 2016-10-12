@@ -6,15 +6,21 @@
 cd
 mkdir KIAT
 cd KIAT/
-mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/Trimmed_Reads
+mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/50bp_Trimmed_Reads Flowering_STAR/100bp_Trimmed_Reads
 ```
 
-### Creating adapter trimmed reads 50bp reads
+### Creating adapter trimmed 50bp reads
 
 ```
-cd KIAT/Flowering_STAR/Trimmed_Reads
-./../flowering_trim.sh
+./../50bp_flowering_trim.sh
 ```
+
+### Creating adapter trimmed 100bp reads
+
+```
+./../100bp_flowering_trim.sh
+```
+
 ### Running STAR on 50bp trimmed reads
 
 ```
