@@ -84,7 +84,7 @@ for (i in 1:ncol(Flowering.DE)){
   Flowering.DE[5,i] <- (Flowering.DE[1,i] + Flowering.DE[3,i])
   Flowering.DE[6,i] <- sprintf("%.2f", round(((Flowering.DE[1,i] + Flowering.DE[3,i]) / Flowering.DE[4,i] * 100),2))
 }
-row.names(Flowering.DE) <- c("# down regulated genes","# unaffected genes","# up regulated genes","Total expressed genes", "Total differentially expressed genes", "% differentially expressed")
+row.names(Flowering.DE) <- c("# down regulated genes","# No differentiation","# up regulated genes","Total expressed genes", "Total differentially expressed genes", "% differentially expressed")
 
 Flowering.DE
 write.csv(Flowering.DE, "R_Analysis/Flowering.DE.csv")
