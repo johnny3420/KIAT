@@ -5,8 +5,9 @@ library(edgeR)
 library(ggplot2)
 library(DESeq2)
 library(ggdendro)
-load("vstMat.flowering.Rdata")
-load("flowering.read.count.small.Rdata")
+load("R_Analysis/vstMat.flowering.Rdata")
+load("R_Analysis/flowering.read.count.small.Rdata")
+load("R_Analysis/flowering.read.count.sample.Rdata")
 
 # Normalize
 dge.data.flowering <- DGEList(counts=flowering.read.count.small, group=flowering.read.count.sample$group)
@@ -36,7 +37,7 @@ p.mds <- p.mds + labs(y = "BCV distance 2", x="BCV distance 1")
 p.mds
 
 # Save Plot
-ggsave("MDS.png", width = 11, height = 8)
+ggsave("R_Analysis/MDS.png", height = 10, width = 10)
 
 # clustering to check sample seperation 
 
@@ -57,4 +58,4 @@ p.dendro <- p.dendro + geom_text(data = label(ggdata.flowering), aes(x = x, y = 
 p.dendro
 
 # Save Plot
-ggsave("clustering_new.png", width = 20, height = 8)
+ggsave("R_Analysis/clustering.png", width = 20)

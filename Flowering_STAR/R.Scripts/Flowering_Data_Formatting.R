@@ -2,7 +2,7 @@
 
 # load files and libraries
 library(DESeq2)
-flowering.read.count <- read.table("Counts/flowering.star.read.count.tsv", header = T, check.names = F)
+flowering.read.count <- read.table("Flowering_STAR/flowering.star.read.count.tsv", header = T, check.names = F)
 rownames(flowering.read.count) <- flowering.read.count[,1]
 flowering.read.count <- flowering.read.count[,-1]
 
@@ -24,7 +24,7 @@ colnames(flowering.read.count) <- flowering_sample_ID
 head(flowering.read.count)
 
 # Save New Count file
-save(flowering.read.count, file = "flowering.read.count.Rdata")
+save(flowering.read.count, file = "R_Analysis/flowering.read.count.Rdata")
 
 ### Set up sample description
 
@@ -32,7 +32,7 @@ save(flowering.read.count, file = "flowering.read.count.Rdata")
 # filter based on read count, assign group, normalize, design matrix, calculate dispersion   
 # set up group 
 
-load("flowering.read.count.Rdata")
+load("R_Analysis/flowering.read.count.Rdata")
 flowering.read.count <- flowering.read.count[,colSums(flowering.read.count) > 1000000]  
 dim(flowering.read.count) #101040 24
 flowering.read.count.sample<-data.frame(file=colnames(flowering.read.count),
@@ -44,18 +44,18 @@ flowering.read.count.sample<-data.frame(file=colnames(flowering.read.count),
                                         group=factor(gsub("(Da-Ae|Da-Ol-1)(_)(Young|flowering|early-silique|late-silique|bolting)(_)(100bp|50bp)(_)(paired|single)(_)(1|2|3)","\\5\\7\\1",colnames(flowering.read.count)))
 )
 
-flowering.read.count.sample
+save(flowering.read.count.sample, file = "R_Analysis/flowering.read.count.sample.Rdata")
 #ftable(flowering.read.count.sample,row.vars="length",col.vars=c("batch","genotype"))
 
 # filter based on read count 
 flowering.read.count.small <- flowering.read.count[rowSums(flowering.read.count > 10) >= 3,]
-dim(flowering.read.count.small) #56498 24
+dim(flowering.read.count.small) #53899 24
 # save
-save(flowering.read.count.small, file = "flowering.read.count.small.Rdata")
+save(flowering.read.count.small, file = "R_Analysis/flowering.read.count.small.Rdata")
 
 ###voom transformation
 
-load("flowering.read.count.small.Rdata")
+load("R_Analysis/flowering.read.count.small.Rdata")
 
 dds.flowering <- DESeqDataSetFromMatrix(countData = round(flowering.read.count.small), colData = flowering.read.count.sample, design = ~ batch + genotype)
 
@@ -63,4 +63,4 @@ vsd.flowering <- varianceStabilizingTransformation(dds.flowering)
 vstMat.flowering <- assay(vsd.flowering)
 colnames(vstMat.flowering) <- colnames(flowering.read.count)
 # save
-save(vstMat.flowering, file = "vstMat.flowering.Rdata")
+save(vstMat.flowering, file = "R_Analysis/vstMat.flowering.Rdata")
