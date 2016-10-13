@@ -5,6 +5,7 @@ library(edgeR)
 library(reshape2)
 library(ggplot2)
 library(plyr)
+library(gplots)
 load("R_Analysis/flowering.read.count.small.Rdata")
 load("R_Analysis/flowering.read.count.sample.Rdata")
 
@@ -239,8 +240,13 @@ melt.Flowering.DE$Comparison <- sub("DAvsDO", "DA vs DO", melt.Flowering.DE$Comp
 ggplot(data=melt.Flowering.DE, aes(Comparison,Count, fill=Comparison)) + facet_wrap(~ Group, scales = "free_y") + 
   geom_bar(stat = "identity") + ggtitle("Differentially Expressed Gene Counts")
 ggsave("R_Analysis/DE.barplot.png", width = 20, height = 8)
-# log transform and replot
-log2.melt.Flowering.DE <- melt.Flowering.DE
-log2.melt.Flowering.DE[,3] <- log(log2.melt.Flowering.DE[3], 2)
-ggplot(data=log2.melt.Flowering.DE, aes(Comparison,Count, fill=Comparison)) + facet_wrap(~ Group, scales = "free_y") + geom_bar(stat = "identity")
+
+### Venn Diagrams
+
+# Up Regulated Genes
+up.venn <- venn(list("100bp Paired"=up.DEgene.gt.100bp.paired,"100bp Single"=up.DEgene.gt.100bp.single,"50bp Paired"=up.DEgene.gt.50bp.paired,"50bp Single"=up.DEgene.gt.50bp.single))
+# Down Regulated Genes
+venn(list("100bp Paired"=down.DEgene.gt.100bp.paired,"100bp Single"=down.DEgene.gt.100bp.single,"50bp Paired"=down.DEgene.gt.50bp.paired,"50bp Single"=down.DEgene.gt.50bp.single))
+# No Differentiation
+venn(list("100bp Paired"=SEgene.gt.100bp.paired,"100bp Single"=SEgene.gt.100bp.single,"50bp Paired"=SEgene.gt.50bp.paired,"50bp Single"=SEgene.gt.50bp.single))
 
