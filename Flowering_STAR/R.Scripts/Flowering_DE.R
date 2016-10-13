@@ -232,15 +232,15 @@ colnames(sim.reg) <-c("100p_vs_50p","100p_vs_100s","100s_vs_50p","100p_vs_50s","
 small.Flowering.DE <- Flowering.DE[c(1:3,5),1:4]
 melt.Flowering.DE <- melt(t(small.Flowering.DE))
 melt.Flowering.DE$value <- as.numeric(as.character(melt.Flowering.DE$value))
-colnames(melt.Flowering.DE) <- c("Condition","Group","Count")
-melt.Flowering.DE$Condition <- gsub("\\.", " ", melt.Flowering.DE$Condition)
-melt.Flowering.DE$Condition <- sub("DAvsDO", "DA vs DO", melt.Flowering.DE$Condition)
-# plot and facet by Condition
-ggplot(data=melt.Flowering.DE, aes(Condition,Count, fill=Condition)) + facet_wrap(~ Group, scales = "free_y") + 
-  geom_bar(stat = "identity")
+colnames(melt.Flowering.DE) <- c("Comparison","Group","Count")
+melt.Flowering.DE$Comparison <- gsub("\\.", " ", melt.Flowering.DE$Comparison)
+melt.Flowering.DE$Comparison <- sub("DAvsDO", "DA vs DO", melt.Flowering.DE$Comparison)
+# plot and facet by Comparison
+ggplot(data=melt.Flowering.DE, aes(Comparison,Count, fill=Comparison)) + facet_wrap(~ Group, scales = "free_y") + 
+  geom_bar(stat = "identity") + ggtitle("Differentially Expressed Gene Counts")
 ggsave("R_Analysis/DE.barplot.png", width = 20, height = 8)
 # log transform and replot
 log2.melt.Flowering.DE <- melt.Flowering.DE
 log2.melt.Flowering.DE[,3] <- log(log2.melt.Flowering.DE[3], 2)
-ggplot(data=log2.melt.Flowering.DE, aes(Condition,Count, fill=Condition)) + facet_wrap(~ Group, scales = "free_y") + geom_bar(stat = "identity")
+ggplot(data=log2.melt.Flowering.DE, aes(Comparison,Count, fill=Comparison)) + facet_wrap(~ Group, scales = "free_y") + geom_bar(stat = "identity")
 
