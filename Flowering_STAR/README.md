@@ -52,6 +52,6 @@ mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/50b
 
 ![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Down_Regulated_Venn.png "Down Regulated Genes")
 
-#### Same regualted genes
+#### Same regulated genes
 
 ![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Same_Regulated_Venn.png "Same Regulated Genes")
