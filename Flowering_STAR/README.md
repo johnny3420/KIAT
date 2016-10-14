@@ -38,6 +38,16 @@ mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/50b
 ```
 ./gene_counts.sh
 ```
+
+### Collecting mapping stats
+
+```
+cd KIAT/Flowering_STAR/Alignments
+mkdir All_Alignmenets
+## Moved contents of 100 and 50 alignment directories to All_Alignments
+./mapping.stats.sh
+```
+
 ### R work see R_Scripts folder
 
 #### Mapping Rates
