@@ -40,9 +40,15 @@ mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/50b
 ```
 ### R work see R_Scripts folder
 
+#### Mapping Rates
+
+![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.5.png, "Combined Mapping Rates")
+![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.4.png " Individual Mapping Rates")
+
+#### DEGs
+
 ![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Combined.DE.barplot.png "Combined DE barplot")
 ![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/DE.barplot.png "DE barplot")
-![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.4.png "Mapping Rates")
 
 #### Up regulated genes
 
