@@ -42,7 +42,7 @@ mkdir -p Flowering_STAR/Alignments Flowering_STAR/Gene_Counts Flowering_STAR/50b
 
 #### Mapping Rates
 
-![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.5.png, "Combined Mapping Rates")
+![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.5.png "Combined Mapping Rates")
 ![alt text](https://github.com/johnny3420/KIAT/blob/master/Graphs/Mapping.barplot.4.png " Individual Mapping Rates")
 
 #### DEGs
