@@ -30,5 +30,7 @@ ggplot(data=melt.stats, aes(Sample,Percentage, fill=Mapping)) + facet_grid(~Repl
   geom_bar(stat = "identity") + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("Mapping Rates")
 ggsave("R_Analysis/Mapping.barplot.4.png")
 ##
-ggplot(data=melt.stats, aes(Sample,Percentage, fill=Mapping)) + facet_grid(Mapping~Replicate, scales = "free_x") + 
-  geom_bar(stat = "identity") + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("Mapping Rates")
+melt.stats$Condition <- sub("\\.All1_Gae_2|\\.All1_Gae_3|\\.2|\\.6|\\.Ae_Gae_2|\\.Ae_Gae_3","",melt.stats$Sample)
+ggplot(data=melt.stats, aes(Mapping,Percentage/6, fill=Mapping)) + ylab("Percent Mapped") + facet_grid(~Condition, scales = "free_x") + 
+  geom_bar(stat = "identity") + theme(axis.text.x=element_text(angle=90, hjust=1)) + ggtitle("Overall Mapping Rates")
+ggsave("R_Analysis/Mapping.barplot.5.png", width = 8)
