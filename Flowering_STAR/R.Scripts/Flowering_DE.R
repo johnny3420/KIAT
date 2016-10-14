@@ -198,7 +198,7 @@ de.reg <- up.reg + down.reg
 ## Plotting of DE genes between different comparisons
 melt.de.reg <- melt(de.reg, varnames = c("Ownership","Comparison"), value.name = "Gene_Counts")
 ggplot(data=melt.de.reg, aes(Ownership,Gene_Counts, fill=Ownership)) + ggtitle("Differently Expressed Gene Counts Between Conditions") +
-  facet_wrap(~ Comparison, scales = "free_y") + geom_bar(stat = "identity")
+  facet_wrap(~ Comparison, scales = "free_y") + geom_bar(stat = "identity") + geom_text(aes(label=Gene_Counts), vjust=1.15)
 ggsave("R_Analysis/Combined.DE.barplot.png")
 ### Compairing names of similarilly expressed genes
 #100bp paired vs 50bp paired
@@ -238,7 +238,7 @@ melt.Flowering.DE$Comparison <- gsub("\\.", " ", melt.Flowering.DE$Comparison)
 melt.Flowering.DE$Comparison <- sub("DAvsDO", "DA vs DO", melt.Flowering.DE$Comparison)
 # plot and facet by Comparison
 ggplot(data=melt.Flowering.DE, aes(Comparison,Count, fill=Comparison)) + facet_wrap(~ Group, scales = "free_y") + 
-  geom_bar(stat = "identity") + ggtitle("Differentially Expressed Gene Counts")
+  geom_bar(stat = "identity") + ggtitle("Differentially Expressed Gene Counts") + geom_bar(stat = "identity") + geom_text(aes(label=Count), vjust=1.15)
 ggsave("R_Analysis/DE.barplot.png", width = 20, height = 8)
 
 ### Venn Diagrams
