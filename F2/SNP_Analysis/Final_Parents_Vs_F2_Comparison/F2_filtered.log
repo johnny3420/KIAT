@@ -1,0 +1,23 @@
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--gzvcf Partial_Complete_F2.vcf.gz
+	--recode-INFO-all
+	--max-alleles 2
+	--maxDP 1e+03
+	--min-alleles 2
+	--minDP 10
+	--minQ 40
+	--out F2_filtered
+	--positions parent_postions.tab
+	--recode
+	--remove-indels
+
+Using zlib version: 1.2.3
+Versions of zlib >= 1.2.4 will be *much* faster when reading zipped VCF files.
+After filtering, kept 166 out of 166 Individuals
+Outputting VCF file...
+After filtering, kept 36733 out of a possible 15183226 Sites
+Run Time = 5634.00 seconds
