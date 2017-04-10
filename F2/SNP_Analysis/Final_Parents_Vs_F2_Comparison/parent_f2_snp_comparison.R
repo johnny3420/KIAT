@@ -85,14 +85,6 @@ combined.30 <- subset(combined.30, select = -na_count)
 #write.csv(combined.20, "All_SNPs_GQ20.csv",row.names = F)
 #write.csv(combined.30, "All_SNPs_GQ30.csv",row.names = F)
 
-
-### Filter for at least median F2 sample calls per site
-#median(combined.20$F2_SNP_Total) 45
-#median(combined.30$F2_SNP_Total) 41
-
-#combined.20 <- subset(combined.20, F2_SNP_Total >= 45)
-#combined.30 <- subset(combined.20, F2_SNP_Total >= 41)
-
 #Extract frequencies
 
 combined.20.freq <- cbind(combined.20[,1:2],
@@ -196,8 +188,8 @@ nrow(combined.30.freq) #36149
 median(combined.20$F2_SNP_Total) #45
 median(combined.30$F2_SNP_Total) #41
 
-combined.20 <- subset(combined.20, F2_SNP_Total >= 45)
-combined.30 <- subset(combined.20, F2_SNP_Total >= 41)
+combined.20 <- subset(combined.20, F2_SNP_Total >= 20)
+combined.30 <- subset(combined.20, F2_SNP_Total >= 20)
 
 #Extract frequencies
 
@@ -300,12 +292,12 @@ m.Ratios <- melt(Ratios)
 colnames(m.Ratios) <- c("Filter","Genotype","Proportion")
 pl <- ggplot(m.Ratios, aes(Genotype,Proportion,fill = Genotype))
 pl + geom_col() + facet_grid(~Filter)
-
+#ggsave("Filter_Comparision.png")
 ### Extract SNP Postions
 
 positions <- combined.30[,1:2] #18138
-write.csv(positions, "Final_F2_SNP_Sites.csv", row.names = F)
-write.table(positions, "Final_F2_SNP_Sites.tab", row.names = F, sep = "\t")
+#write.csv(positions, "Final_F2_SNP_Sites.csv", row.names = F)
+#write.table(positions, "Final_F2_SNP_Sites.tab", row.names = F, sep = "\t")
 
 ### Napus Rna Seq dataset avail, check to see what they found
 
