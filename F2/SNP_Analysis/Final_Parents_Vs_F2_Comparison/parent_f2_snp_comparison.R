@@ -185,11 +185,11 @@ nrow(combined.20.freq) #36149
 nrow(combined.30.freq) #36149
 
 ### Filter for at least median F2 sample calls per site
-median(combined.20$F2_SNP_Total) #45
-median(combined.30$F2_SNP_Total) #41
+median(combined.20$F2_SNP_Total) #88
+median(combined.30$F2_SNP_Total) #77
 
-combined.20 <- subset(combined.20, F2_SNP_Total >= 20)
-combined.30 <- subset(combined.20, F2_SNP_Total >= 20)
+combined.20 <- subset(combined.20, F2_SNP_Total >= 88)
+combined.30 <- subset(combined.20, F2_SNP_Total >= 77)
 
 #Extract frequencies
 
