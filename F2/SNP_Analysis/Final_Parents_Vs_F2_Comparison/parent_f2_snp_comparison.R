@@ -295,7 +295,7 @@ pl + geom_col() + facet_grid(~Filter)
 #ggsave("Filter_Comparision.png")
 ### Extract SNP Postions
 
-positions <- combined.30[,1:2] #18138
+positions <- combined.30[,1:2] #18226
 #write.csv(positions, "Final_F2_SNP_Sites.csv", row.names = F)
 #write.table(positions, "Final_F2_SNP_Sites.tab", row.names = F, sep = "\t")
 
