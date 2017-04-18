@@ -191,6 +191,11 @@ median(combined.30$F2_SNP_Total) #77
 combined.20 <- subset(combined.20, F2_SNP_Total >= 88)
 combined.30 <- subset(combined.20, F2_SNP_Total >= 77)
 
+# Saving combined.30
+temp <- combined.30[,-c(173:177)]
+write.table(temp,file = "F2_Final_SNP_Calls", col.names = T, row.names = F, sep = "\t")
+test <- read.delim("F2_Final_SNP_Calls", header = T, check.names = F)
+test
 #Extract frequencies
 
 combined.20.freq <- cbind(combined.20[,1:2],
